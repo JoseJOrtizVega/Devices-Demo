@@ -1,28 +1,44 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "DeviceComponent.generated.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogDeviceComponent, Log, All);
 
+/**
+ * Base class used to define devices.
+ */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DEVICES_API UDeviceComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UDeviceComponent();
+public:
+	/**
+	 * Gets the owner of this component's device type.
+	 * @return EDeviceType
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Device")
+	EDeviceType GetDeviceType() const;
+
+	/**
+	 * Gets the owner of this component's device ID.
+	 * @return EDeviceType
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Device")
+	EDeviceID GetDeviceID() const;
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	/**
+	 * Device type for the component
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Device")
+	EDeviceType DeviceType;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	/**
+	 * Device ID for the component.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Device")
+	EDeviceID DeviceID;
 };

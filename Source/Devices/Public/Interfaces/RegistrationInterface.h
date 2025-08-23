@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,12 +12,24 @@ class URegistrationInterface : public UInterface
 };
 
 /**
- * 
+ * Interface responsible for sending special registration calls to the owners of [ReceiverComponents] and [SenderComponents]
  */
 class DEVICES_API IRegistrationInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	/**
+	 * Function responsible for sending a registration call to the owner of this interface
+	 * @param InstigatorActor Whoever initiated the registration event
+	 */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Device Registration Interface")
+	void RegisterCallSent(AActor* InstigatorActor);
+
+	/**
+	 * Function responsible for sending an unregistration call to the owner of this interface
+	 * @param InstigatorActor Whoever initiated the registration event
+	 */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Device Registration Interface")
+	void UnRegisterCallSent(AActor* InstigatorActor);
 };
