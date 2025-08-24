@@ -33,6 +33,13 @@ void ADeviceCollectorVolume::CollectData(AActor* InstigatorActor)
 		UE_LOG(LogDeviceCollectorVolume, Error, TEXT("[%s] doesn't have any actors with sender components. CollectData function will not run"), *GetNameSafe(this));
 		return;
 	}
+
+	// Clear existing connections first to prevent duplicates
+	if (!LinkedDeviceSenderComponents.IsEmpty())
+	{
+		UE_LOG(LogDeviceCollectorVolume, Warning, TEXT("[%s] already has linked devices. Clearing them before reconnecting."), *GetNameSafe(this));
+		SendUnsubscribeCalls(InstigatorActor);
+	}
 	
 	// allow overlap events to be generated
 	GetBrushComponent()->SetGenerateOverlapEvents(true);
@@ -120,6 +127,11 @@ void ADeviceCollectorVolume::SendUnsubscribeCalls(AActor* InstigatorActor)
 	for (int i = LinkedDeviceSenderComponents.Num() - 1; i >= 0; i--)
 	{
 		LinkedDeviceSenderComponents[i]->ClearLinkedDevices(InstigatorActor);
+
+		if (LinkedDeviceSenderComponents[i]->GetOwner()->Implements<URegistrationInterface>())
+		{
+			IRegistrationInterface::Execute_UnRegisterCallSent(LinkedDeviceSenderComponents[i]->GetOwner(), InstigatorActor);
+		}
 
 		LinkedDeviceSenderComponents.RemoveAt(i);
 	}

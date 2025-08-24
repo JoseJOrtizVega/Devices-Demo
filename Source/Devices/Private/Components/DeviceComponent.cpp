@@ -1,5 +1,5 @@
-#include "Data/EDeviceTypeEnum.h"
 #include "Components/DeviceComponent.h"
+#include "Data/EDeviceTypeEnum.h"
 
 EDeviceType UDeviceComponent::GetDeviceType() const
 {
